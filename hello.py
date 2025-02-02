@@ -1,5 +1,5 @@
 def main():
-	print('Hello from playground!')
+	print("Hello from playground!")
 
 
 # make few functions
@@ -19,5 +19,5 @@ def add(a, b):
 	return a + b
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 	main()
