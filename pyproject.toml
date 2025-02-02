@@ -1,0 +1,54 @@
+[project]
+name = "playground"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.58.1",
+    "pydantic-settings>=2.7.0",
+    "pydantic>=2.10.4",
+    "ruff>=0.7.1",
+    "langchain_community>=0.1.0",
+    "streamlit>=0.1.0",
+    "langchain>=0.1.0",
+    "langchain_experimental>=0.1.0",
+    "pdfplumber>=0.1.0",
+    "sentence-transformers>0.0.1",
+    "semantic-chunkers>0.0.1",
+    "open-text-embeddings>0.0.1",
+    "prompt-template>0.0.1",
+    "watchdog>0.0.1",
+    "langchain-ollama>0.0.1",
+    "langchain-huggingface>0.0.1",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "tab"
+docstring-code-format = true
+docstring-code-line-length = 20
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["F401"]
+extend-safe-fixes = ["F601"]
+extend-unsafe-fixes = ["UP034"]
+fixable = ["ALL"]
+unfixable = ["F401"]
