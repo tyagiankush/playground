@@ -1,0 +1,67 @@
+# Byte-compiled / cached / virtual environment files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+venv/
+.env/
+*.venv/
+*.env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Logs and debugging
+*.log
+*.out
+*.err
+debug.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+*.iml
+
+# Testing and Coverage reports
+.coverage
+htmlcov/
+*.cover
+*.py,cover
+.tox/
+nosetests.xml
+coverage.xml
+*.pytest_cache/
+
+# MyPy type checking
+.mypy_cache/
+
+# Docker files
+docker-compose.override.yml
+
+# Environment variables and secrets
+.env
+*.env*
+secrets.json
+
+# Cached pip downloads
+__pypackages__/
+
+# PyCharm project files
+*.idea/
+
+# Temporary files
+*.swp
+*.swo
+~$*
