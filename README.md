@@ -1,82 +1,110 @@
-📄 RAG System with DeepSeek R1 & Ollama
+# Playground Project
 
-This is a Streamlit-based Retrieval-Augmented Generation (RAG) System that allows users to upload PDF documents, extract content, and ask questions based on the document context using the DeepSeek R1 model via Ollama.
+A collection of interactive applications including a RAG system and a coding game.
 
-🚀 Features
+## Features
 
-PDF Upload: Supports multiple PDF files.
+### Chat Module
+- RAG (Retrieval-Augmented Generation) system using DeepSeek R1 & Ollama
+- Support for PDF, TXT, and DOCX documents
+- Streaming responses
+- Chat history management
+- Response download functionality
 
-Text Processing: Extracts and splits document content using Semantic Chunking.
+### Game Module
+- Interactive coding game
+- Real-time code validation
+- Score tracking
+- User-friendly interface
 
-DeepSeek R1 via Ollama: Uses the LLM for answering document-related questions.
+## Installation
 
-Streaming Responses: Real-time response generation.
-
-Download Responses: Save responses as .txt files.
-
-Streaming Toggle: Enable/Disable response streaming via UI.
-
-Auto-Close Notifications: Success banners disappear automatically after 5 seconds.
-
-🛠️ Installation
-
-Ensure you have Python 3.11+ installed.
-
-# Clone the repository
-git clone https://github.com/tyagiankush/playground.git
+1. Clone the repository:
+```bash
+git clone <repository-url>
 cd playground
+```
 
-# Create a virtual environment
+2. Create and activate a virtual environment:
+```bash
 python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-# Install dependencies
+3. Install dependencies:
+```bash
 pip install -r requirements.txt
 or
 uv sync
+```
 
-🏃‍♂️ Running the App
+4. Set up environment variables:
+Create a `.env` file in the root directory with the following content:
+```env
+API_KEY=your_api_key_here
+MODEL_NAME=gpt-4o-mini
+DEBUG=false
+LOG_LEVEL=INFO
+```
 
-1️⃣ Start Ollama with DeepSeek R1
+## Usage
 
-Make sure you have Ollama installed and running DeepSeek R1:
+### Chat Module
+To run the RAG system:
+```bash
+streamlit run src/chat/deepseek.py
+```
 
-ollama run deepseek-r1
+### Game Module
+To run the coding game:
+```bash
+python src/game/space.py
+```
 
-2️⃣ Run the Streamlit App
+## Project Structure
 
-streamlit run  streamlit run ./playground/chat/deepseek.py
+```
+src/
+├── chat/
+│   ├── deepseek.py      # RAG system implementation
+│   ├── gpt.py           # GPT integration
+│   └── settings.py      # Configuration settings
+├── game/
+│   └── space.py         # Coding game implementation
+└── logging_config.py    # Logging configuration
+```
 
-🖼️ UI Overview
+## Development
 
-Upload PDFs → Select one or multiple PDFs.
+### Code Style
+The project uses:
+- Black for code formatting
+- isort for import sorting
+- mypy for type checking
+- pylint for code quality
 
-Toggle Streaming → Enable or disable response streaming.
+Run the following commands to maintain code quality:
+```bash
+black .
+isort .
+mypy .
+pylint src/
+```
 
-Ask a Question → Enter a query based on uploaded documents.
+### Testing
+Run tests using pytest:
+```bash
+pytest
+```
 
-View or Download Response → Read or save the AI-generated answer.
+## Contributing
 
-📌 Example Usage
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-Upload a PDF file.
+## License
 
-Ask a question like: "What is the main topic of this document?"
-
-View or download the AI-generated response.
-
-⚡ Future Enhancements
-
-Better Chunking Strategies to improve retrieval.
-
-Multi-Document Querying for cross-document answers.
-
-Different Model Support (e.g., Mistral, GPT-4, Llama2).
-
-🤝 Contributing
-
-Feel free to open an issue or submit a PR!
-
-📜 License
-
-MIT License © 2025 Your Name/Company
+This project is licensed under the MIT License - see the LICENSE file for details.
