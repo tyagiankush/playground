@@ -1,27 +1,37 @@
 [project]
 name = "playground"
 version = "0.1.0"
-description = "Add your description here"
+description = "My ideas but in code"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "openai>=1.58.1",
-    "pydantic-settings>=2.7.0",
-    "pydantic>=2.10.4",
-    "ruff>=0.7.1",
-    "langchain_community>=0.1.0",
-    "streamlit>=0.1.0",
-    "langchain>=0.1.0",
-    "langchain_experimental>=0.1.0",
-    "pdfplumber>=0.1.0",
-    "sentence-transformers>0.0.1",
-    "semantic-chunkers>0.0.1",
-    "open-text-embeddings>0.0.1",
-    "prompt-template>0.0.1",
-    "watchdog>0.0.1",
-    "langchain-ollama>0.0.1",
-    "langchain-huggingface>0.0.1",
+authors = [
+    { name = "Ankush Tyagi", email = "tyagi.ankush94@gmail.com" }
 ]
+license = { file = "LICENSE" }
+
+dependencies = [
+    "docx2txt>0.0.1",
+    "langchain>=0.3.17",
+    "langchain-community>=0.3.16",
+    "langchain-experimental>=0.3.4",
+    "langchain-huggingface>=0.1.2",
+    "langchain-ollama>=0.2.3",
+    "openai>=1.61.0",
+    "open-text-embeddings>=1.0.4",
+    "pdfplumber>=0.11.5",
+    "prompt-template>=1.1.0",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.7.1",
+    "ruff>=0.9.4",
+    "semantic-chunkers>=0.0.10",
+    "sentence-transformers>=3.4.1",
+    "streamlit>=1.41.1",
+    "watchdog>=6.0.0",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 line-length = 120
@@ -34,21 +44,13 @@ docstring-code-line-length = 20
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+    "E",  # pycodestyle
+    "F",  # Pyflakes
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I",  # isort
 ]
 ignore = ["F401"]
-extend-safe-fixes = ["F601"]
-extend-unsafe-fixes = ["UP034"]
 fixable = ["ALL"]
 unfixable = ["F401"]

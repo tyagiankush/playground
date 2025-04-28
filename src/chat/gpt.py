@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-from chat.settings import settings
+from src.chat.settings import settings
 
 
 def chat_with_llm(query: str) -> None:

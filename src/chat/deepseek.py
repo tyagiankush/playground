@@ -1,5 +1,5 @@
-import time
 import uuid
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -15,11 +15,6 @@ from langchain_ollama import OllamaLLM
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 __MODEL = "deepseek-r1"
-
-
-def clear_banner(banner, time_in_secs: int = 3) -> None:
-	time.sleep(time_in_secs)
-	banner.empty()
 
 
 def prepare_chain() -> Runnable[dict[str, Any], Any]:
@@ -39,32 +34,21 @@ def prepare_chain() -> Runnable[dict[str, Any], Any]:
 
 
 def write_response(documents: list[Document], streaming: bool) -> None:
+	print(f"Write response was called at {datetime.now()}")
 	# setup the llm and prompt
 	chain = prepare_chain()
 
-	col1, col2 = st.columns([0.8, 0.2])
-	with col2:
-		if st.button(label="Clear History", icon="🗑️", type="secondary", use_container_width=True):
-			st.session_state.chat_history = []
-			st.rerun()
-
-	# Custom CSS to pin the text input at the bottom
-	st.markdown(
-		"""
-	    <style>
-	    .bottom-container {
-	        position: fixed;
-	        bottom: 20px;
-	        left: 0;
-	        right: 0;
-	        background-color: white;
-	        padding: 10px;
-	        z-index: 999;
-	    }
-	    </style>
-	    """,  # noqa: E101
-		unsafe_allow_html=True,
+	col1, col2 = st.columns(
+		[0.8, 0.2],
+		vertical_alignment="center",
+		gap="medium",
 	)
+
+	with col2:
+		if st.button(label="Clear Chats", icon="🗑", type="secondary", use_container_width=True):
+			st.session_state.user_input = ""
+			st.session_state.chat_history = []
+			# st.rerun()
 
 	if "chat_history" not in st.session_state:
 		st.session_state.chat_history = []
@@ -79,20 +63,18 @@ def write_response(documents: list[Document], streaming: bool) -> None:
 		st.session_state.widget = ""
 
 	# Display the text input field with the current value from session_state
-	with col1, st.container():
-		# st.markdown('<div class="bottom-container">', unsafe_allow_html=True)
+	with col1:
 		st.text_input(
 			label="Ask a question about your documents:",
 			key="widget",
 			on_change=submit,
 			max_chars=500,
 		)
-		st.markdown("</div>", unsafe_allow_html=True)
 
 	user_input = st.session_state.my_text
 	# Check if the user presses Enter (when input field is not empty)
 	if user_input:
-		st.session_state.user_input = user_input  # Store input in session state
+		st.session_state.user_input = user_input
 
 	if user_input:
 		st.session_state.chat_history.append({"question": user_input, "answer": ""})
@@ -112,16 +94,16 @@ def write_response(documents: list[Document], streaming: bool) -> None:
 		# Update history
 		st.session_state.chat_history[-1]["answer"] = response
 
-		# Show history
+		# ßShow history
 		for chat in st.session_state.chat_history:
 			st.markdown(f"**Q:** {chat['question']}")
 			st.markdown(f"**A:** {chat['answer']}")
 			st.markdown("---")
 
 		if response:
-			st.download_button("📥 Download Response", response, file_name="response.txt")
+			st.download_button(data=response, label="Download Response", icon="📥", file_name="response.txt")
 		else:
-			st.warning("⚠️ No response generated. Try rephrasing your question.")
+			st.warning(body="No response generated. Try rephrasing your question.", icon="⚠️")
 
 
 @st.cache_data
@@ -130,15 +112,15 @@ def load_document(uploaded_file: UploadedFile) -> list[Document]:
 	ext = uploaded_file.name.split(".")[-1].lower()
 
 	if ext == "pdf":
-		temp_path = Path(f"temp_{uuid.uuid4()}.pdf")
+		temp_path = Path(f"./target/temp_{uuid.uuid4()}.pdf")
 		temp_path.write_bytes(uploaded_file.getvalue())
 		loader = PDFPlumberLoader(str(temp_path))
 	elif ext == "txt":
-		temp_path = Path(f"temp_{uuid.uuid4()}.txt")
+		temp_path = Path(f"./target/temp_{uuid.uuid4()}.txt")
 		temp_path.write_bytes(uploaded_file.getvalue())
 		loader = TextLoader(str(temp_path))
 	elif ext == "docx":
-		temp_path = Path(f"temp_{uuid.uuid4()}.docx")
+		temp_path = Path(f"./target/temp_{uuid.uuid4()}.docx")
 		temp_path.write_bytes(uploaded_file.getvalue())
 		loader = Docx2txtLoader(str(temp_path))
 	else:
