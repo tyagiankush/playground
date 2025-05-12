@@ -15,13 +15,27 @@ class GameState:
 	is_correct: bool = False
 	message: str = ""
 	score: int = 0
+	current_level: int = 1
 
 
 class GameController:
 	"""Controller class handling game logic."""
 
-	CORRECT_CODE = 'destination = "Mars"\nprint(destination)'
-	MAX_SCORE = 100
+	LEVELS = {
+		1: {
+			"correct_code": 'destination = "Mars"\nprint(destination)',
+			"success_message": "🚀 Course set for Mars!\nNavigation updated: Destination - Mars",
+			"hint": "Hint: Use destination = 'Mars' and print(destination)",
+			"score": 100
+		},
+		2: {
+			"correct_code": 'distance = 225000000  # km to Mars\nspeed = 50000  # km/h\ntravel_time = distance / speed\nprint(f"Travel time to Mars: {travel_time} hours")',
+			"success_message": "⏱️ Perfect! You've calculated the travel time to Mars!\nThe journey will take 4500 hours (about 187.5 days)",
+			"hint": "Hint: Calculate travel time using distance (225,000,000 km) divided by speed (50,000 km/h)",
+			"score": 200
+		}
+	}
+	MAX_LEVEL = 2
 
 	def __init__(self, model: GameState):
 		self.model = model
@@ -30,18 +44,19 @@ class GameController:
 		"""Check if the user's code is correct and update the game state."""
 		try:
 			self.model.user_code = code.strip()
-			self.model.is_correct = code.strip() == self.CORRECT_CODE
+			current_level_data = self.LEVELS[self.model.current_level]
+			self.model.is_correct = code.strip() == current_level_data["correct_code"]
 
 			if self.model.is_correct:
-				self.model.message = "🚀 Course set for Mars!\nNavigation updated: Destination - Mars"
-				self.model.score = self.MAX_SCORE
+				self.model.message = current_level_data["success_message"]
+				self.model.score += current_level_data["score"]
+				if self.model.current_level < self.MAX_LEVEL:
+					self.model.current_level += 1
+					self.model.message += f"\n\n🎉 Level {self.model.current_level} unlocked!"
 			else:
-				self.model.message = (
-					"❌ Oops! Something's not right.\nHint: Use destination = 'Mars' and print(destination)"
-				)
-				self.model.score = 0
+				self.model.message = f"❌ Oops! Something's not right.\n{current_level_data['hint']}"
 
-			logger.info(f"Code checked. Correct: {self.model.is_correct}")
+			logger.info(f"Code checked. Correct: {self.model.is_correct}, Level: {self.model.current_level}")
 		except Exception as e:
 			logger.error(f"Error checking code: {str(e)}")
 			self.model.message = "An error occurred while checking your code."
@@ -58,32 +73,43 @@ class GameView:
 	def setup_ui(self) -> None:
 		"""Set up the game UI components."""
 		try:
-			self.root.title("CodeQuest: Set Course for Mars")
-			self.root.geometry("600x400")
+			self.root.title("CodeQuest: Space Adventure")
+			self.root.geometry("800x600")
 			self.root.configure(bg="black")
 
 			# Title Label
 			self.title_label = tk.Label(
 				self.root,
-				text="🛰️ Set Course for Mars",
+				text="🛰️ Space Code Adventure",
 				font=("Arial", 16, "bold"),
 				fg="white",
 				bg="black",
 			)
 			self.title_label.pack(pady=10)
 
+			# Level Label
+			self.level_label = tk.Label(
+				self.root,
+				text="Level 1",
+				font=("Arial", 12, "bold"),
+				fg="yellow",
+				bg="black",
+			)
+			self.level_label.pack()
+
 			# Instructions
 			self.instruction_label = tk.Label(
 				self.root,
-				text='Enter the correct code to set the destination to "Mars".',
+				text='Level 1: Enter the correct code to set the destination to "Mars".',
 				font=("Arial", 12),
 				fg="white",
 				bg="black",
+				wraplength=700,
 			)
 			self.instruction_label.pack()
 
 			# Code Input Box
-			self.input_box = tk.Text(self.root, height=5, width=50, font=("Courier", 12))
+			self.input_box = tk.Text(self.root, height=8, width=70, font=("Courier", 12))
 			self.input_box.pack(pady=10)
 
 			# Run Button
@@ -98,11 +124,24 @@ class GameView:
 			self.run_button.pack(pady=5)
 
 			# Output Label
-			self.output_label = tk.Label(self.root, text="", font=("Arial", 12), fg="white", bg="black")
+			self.output_label = tk.Label(
+				self.root,
+				text="",
+				font=("Arial", 12),
+				fg="white",
+				bg="black",
+				wraplength=700,
+			)
 			self.output_label.pack(pady=10)
 
 			# Score Label
-			self.score_label = tk.Label(self.root, text="Score: 0", font=("Arial", 12), fg="white", bg="black")
+			self.score_label = tk.Label(
+				self.root,
+				text="Score: 0",
+				font=("Arial", 12),
+				fg="white",
+				bg="black",
+			)
 			self.score_label.pack(pady=5)
 
 		except Exception as e:
@@ -123,9 +162,23 @@ class GameView:
 		"""Update the UI based on the current game state."""
 		try:
 			self.output_label.config(
-				text=self.controller.model.message, fg="green" if self.controller.model.is_correct else "red"
+				text=self.controller.model.message,
+				fg="green" if self.controller.model.is_correct else "red"
 			)
 			self.score_label.config(text=f"Score: {self.controller.model.score}")
+			self.level_label.config(text=f"Level {self.controller.model.current_level}")
+			
+			# Update instructions based on level
+			if self.controller.model.current_level == 1:
+				self.instruction_label.config(
+					text='Level 1: Enter the correct code to set the destination to "Mars".'
+				)
+			elif self.controller.model.current_level == 2:
+				self.instruction_label.config(
+					text="Level 2: Calculate the travel time to Mars using the given distance and speed.\n"
+					"Distance to Mars: 225,000,000 km\n"
+					"Spacecraft speed: 50,000 km/h"
+				)
 		except Exception as e:
 			logger.error(f"Error updating UI: {str(e)}")
 
