@@ -17,7 +17,7 @@ def setup_logging(
 	    level: Logging level (default: INFO)
 	    max_bytes: Maximum size of each log file in bytes
 	    backup_count: Number of backup log files to keep
-	"""
+	"""  # noqa: E101
 	# Create logs directory if it doesn't exist
 	if log_file:
 		log_path = Path(log_file)
