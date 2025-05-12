@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from typing import Optional
 
 from openai import AsyncOpenAI, OpenAIError
 from openai.types.chat import ChatCompletion
@@ -19,13 +18,13 @@ class GPTClient:
 		self.max_tokens = settings.max_tokens
 		self.top_p = settings.top_p
 
-	async def chat_with_llm(self, query: str) -> Optional[str]:
+	async def chat_with_llm(self, query: str) -> str | None:
 		"""
 		Asynchronously chat with the LLM.
-		
+
 		Args:
 			query: The user's query string
-			
+
 		Returns:
 			Optional[str]: The model's response or None if an error occurs
 		"""
@@ -37,11 +36,11 @@ class GPTClient:
 				max_tokens=self.max_tokens,
 				top_p=self.top_p,
 			)
-			
+
 			response = completion.choices[0].message.content
 			logger.info(f"Successfully generated response for query: {query[:50]}...")
 			return response
-			
+
 		except OpenAIError as e:
 			logger.error(f"OpenAI API error: {str(e)}")
 			return None

@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class GameState:
 	"""Model class representing the game state."""
+
 	user_code: str = ""
 	is_correct: bool = False
 	message: str = ""
@@ -18,6 +19,7 @@ class GameState:
 
 class GameController:
 	"""Controller class handling game logic."""
+
 	CORRECT_CODE = 'destination = "Mars"\nprint(destination)'
 	MAX_SCORE = 100
 
@@ -29,17 +31,16 @@ class GameController:
 		try:
 			self.model.user_code = code.strip()
 			self.model.is_correct = code.strip() == self.CORRECT_CODE
-			
+
 			if self.model.is_correct:
 				self.model.message = "🚀 Course set for Mars!\nNavigation updated: Destination - Mars"
 				self.model.score = self.MAX_SCORE
 			else:
 				self.model.message = (
-					"❌ Oops! Something's not right.\n"
-					"Hint: Use destination = 'Mars' and print(destination)"
+					"❌ Oops! Something's not right.\nHint: Use destination = 'Mars' and print(destination)"
 				)
 				self.model.score = 0
-				
+
 			logger.info(f"Code checked. Correct: {self.model.is_correct}")
 		except Exception as e:
 			logger.error(f"Error checking code: {str(e)}")
@@ -48,6 +49,7 @@ class GameController:
 
 class GameView:
 	"""View class handling the game UI."""
+
 	def __init__(self, root: tk.Tk, controller: GameController):
 		self.root = root
 		self.controller = controller
@@ -81,12 +83,7 @@ class GameView:
 			self.instruction_label.pack()
 
 			# Code Input Box
-			self.input_box = tk.Text(
-				self.root,
-				height=5,
-				width=50,
-				font=("Courier", 12)
-			)
+			self.input_box = tk.Text(self.root, height=5, width=50, font=("Courier", 12))
 			self.input_box.pack(pady=10)
 
 			# Run Button
@@ -101,23 +98,11 @@ class GameView:
 			self.run_button.pack(pady=5)
 
 			# Output Label
-			self.output_label = tk.Label(
-				self.root,
-				text="",
-				font=("Arial", 12),
-				fg="white",
-				bg="black"
-			)
+			self.output_label = tk.Label(self.root, text="", font=("Arial", 12), fg="white", bg="black")
 			self.output_label.pack(pady=10)
 
 			# Score Label
-			self.score_label = tk.Label(
-				self.root,
-				text="Score: 0",
-				font=("Arial", 12),
-				fg="white",
-				bg="black"
-			)
+			self.score_label = tk.Label(self.root, text="Score: 0", font=("Arial", 12), fg="white", bg="black")
 			self.score_label.pack(pady=5)
 
 		except Exception as e:
@@ -132,21 +117,15 @@ class GameView:
 			self.update_ui()
 		except Exception as e:
 			logger.error(f"Error in run button click: {str(e)}")
-			self.output_label.config(
-				text="An error occurred. Please try again.",
-				fg="red"
-			)
+			self.output_label.config(text="An error occurred. Please try again.", fg="red")
 
 	def update_ui(self) -> None:
 		"""Update the UI based on the current game state."""
 		try:
 			self.output_label.config(
-				text=self.controller.model.message,
-				fg="green" if self.controller.model.is_correct else "red"
+				text=self.controller.model.message, fg="green" if self.controller.model.is_correct else "red"
 			)
-			self.score_label.config(
-				text=f"Score: {self.controller.model.score}"
-			)
+			self.score_label.config(text=f"Score: {self.controller.model.score}")
 		except Exception as e:
 			logger.error(f"Error updating UI: {str(e)}")
 
@@ -157,7 +136,7 @@ def main() -> None:
 		root = tk.Tk()
 		model = GameState()
 		controller = GameController(model)
-		view = GameView(root, controller)
+		GameView(root, controller)
 		root.mainloop()
 	except Exception as e:
 		logger.error(f"Application error: {str(e)}")
